@@ -1,0 +1,10 @@
+Django
+djangorestframework
+psycopg2
+drf-spectacular
+celery
+flower
+lxml
+redis
+selenium
+webdriver-manager
