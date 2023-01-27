@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
+      args:
+        - DEV=true
     image: comp-scraper
     container_name: comp-scraper
     networks:
