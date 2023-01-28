@@ -1,6 +1,6 @@
 from django.db import models
 from categories.models import Category
-from stores.models import LocalStore
+from stores.models import EccommerceStore, LocalStore
 
 
 class Product(models.Model):
@@ -16,11 +16,13 @@ class Product(models.Model):
     brand_name = models.CharField(max_length=50, blank=True)
     default_price = models.DecimalField(
         blank=True,
+        null=True,
         max_digits=7,
         decimal_places=2,
     )
     default_price = models.DecimalField(
         blank=True,
+        null=True,
         max_digits=7,
         decimal_places=2,
     )
@@ -30,6 +32,10 @@ class Product(models.Model):
     qty_per_package = models.IntegerField(null=True)
     tax_rate = models.CharField(max_length=10, blank=True)
     category_path = models.CharField(max_length=50, blank=True)
+    parrent_store = models.ForeignKey(
+        EccommerceStore,
+        on_delete=models.CASCADE,
+    )
     parrent_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -51,6 +57,7 @@ class ProductLocalData(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(
         blank=True,
+        null=True,
         max_digits=7,
         decimal_places=2,
     )
@@ -62,7 +69,7 @@ class ProductLocalData(models.Model):
     last_scrape = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.parrent_local_store}: {self.name}"
+        return f"{self.parrent_local_store.name}: {self.name}"
 
 
 class ProductExtraField(models.Model):
@@ -82,4 +89,4 @@ class ProductExtraField(models.Model):
     last_scrape = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return self.field_name
+        return f"{self.parrent_product.name}: {self.field_name}"
