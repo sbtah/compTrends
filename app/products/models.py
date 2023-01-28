@@ -9,6 +9,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     url = models.URLField(max_length=255, unique=True)
 
+    api_url = models.URLField(max_length=255, blank=True)
     scraped_id = models.IntegerField(null=True)
     sku = models.CharField(max_length=50, blank=True)
     ean = models.CharField(max_length=50, blank=True)
@@ -33,7 +34,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    last_scrape = models.DateTimeField(blank=True)
+    last_scrape = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +59,10 @@ class ProductLocalData(models.Model):
     availability = models.CharField(max_length=10, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    last_scrape = models.DateTimeField(blank=True)
+    last_scrape = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.parrent_local_store}: {self.name}"
 
 
 class ProductExtraField(models.Model):
@@ -73,6 +77,9 @@ class ProductExtraField(models.Model):
     )
     field_name = models.CharField(max_length=100)
     field_data = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    last_scrape = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.field_name
