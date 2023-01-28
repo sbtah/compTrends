@@ -49,7 +49,9 @@ class TestStoresModels:
         """Test that __str__ is properly generated for LocalStore."""
 
         local_store = example_local_store
-        assert str(local_store) == f"{local_store.scraped_id}: {local_store.name}"
+        assert (
+            str(local_store) == f"{local_store.scraped_id}: {local_store.name}"
+        )  # noqa
 
     def test_create_store_extra_field(self, example_eccommerce_store):
         """Test creating StoreExtraField object."""
