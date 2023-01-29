@@ -24,11 +24,11 @@ class LocalStore(models.Model):
         EccommerceStore,
         on_delete=models.CASCADE,
     )
-
     name = models.CharField(max_length=100, unique=True)
+    scraped_id = models.IntegerField(null=True)
+
     url = models.URLField(max_length=255, blank=True)
     api_url = models.URLField(max_length=255, blank=True)
-    scraped_id = models.IntegerField(null=True)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
