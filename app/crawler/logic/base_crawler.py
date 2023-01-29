@@ -1,0 +1,67 @@
+from random import choice
+from typing import List
+import asyncio
+import httpx
+
+from utilites.logger import logger
+from crawler.options.settings import USER_AGENTS
+
+
+class BaseApiCrawler:
+    """
+    Simple crawler used for requesting APIs.
+    """
+
+    def __init__(self, logger=logger):
+        self.logger = logger
+
+    @classmethod
+    def get_random_user_agent(cls, user_agent_list: List[str]) -> str:
+        """
+        Return str with random User-Agent.
+        - :arg user_agent_list: List of strings with User Agents.
+        """
+        agent = choice(user_agent_list)
+        return agent
+
+    @property
+    def user_agent(self) -> str:
+        agent = self.get_random_user_agent(USER_AGENTS)
+        return agent
+
+    def get(self, url: str) -> str:
+        """
+        Requests specified url synchronously. Returns JSON.
+        - :arg url: Requested URL.
+        """
+        headers = {"User-Agent": f"{self.user_agent}"}
+        try:
+            res = httpx.get(url, timeout=10, headers=headers)
+            return res.json()
+        except httpx._exceptions.TimeoutException:
+            self.logger.error("Connection was timed out.")
+            return None
+        except httpx._exceptions.ConnectError:
+            self.logger.error("Connection Error.")
+            return None
+        except httpx._exceptions.HTTPError:
+            self.logger.error("HTTPError was raised.")
+            return None
+        except Exception as e:
+            self.logger.error(f"(get) Exception: {e}")
+            return None
+
+    async def async_get(self, client: httpx.AsyncClient, url: str) -> str:
+        """
+        Requests specified URL asynchronously. Returns JSON.
+        - :arg client: Asynchronous client.
+        - :arg url: Requested URL.
+        """
+        headers = {"User-Agent": f"{self.user_agent}"}
+        try:
+            res = await client.get(url, headers=headers)
+            await asyncio.sleep(0.5)
+            return res
+        except Exception as e:
+            self.logger.error(f"(async_get) Exception: {e}")
+            return None
