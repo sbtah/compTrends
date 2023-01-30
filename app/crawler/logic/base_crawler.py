@@ -2,7 +2,7 @@ from random import choice
 from typing import List
 import asyncio
 import httpx
-
+from crawler.helpers.randoms import random_sleep_small
 from utilites.logger import logger
 from crawler.options.settings import USER_AGENTS
 
@@ -37,6 +37,7 @@ class BaseApiCrawler:
         headers = {"User-Agent": f"{self.user_agent}"}
         try:
             res = httpx.get(url, timeout=10, headers=headers)
+            random_sleep_small()
             return res.json()
         except httpx._exceptions.TimeoutException:
             self.logger.error("Connection was timed out.")

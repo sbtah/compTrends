@@ -1,4 +1,4 @@
-# This is commercial project for web scraping"
+# This is commercial project for web scraping
 
 - We will track the products prices etc. for DIY markets.
 

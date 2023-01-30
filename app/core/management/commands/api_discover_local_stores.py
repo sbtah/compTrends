@@ -13,6 +13,11 @@ def fetch_local_stores(parrent_domain):
     """
     try:
         parrent_e_store = EccommerceStore.objects.get(domain=parrent_domain)
+    except EccommerceStore.DoesNotExist:
+        logger.error("No EccomerceStore found. Creating...")
+        parrent_e_store = EccommerceStore.objects.create(
+            domain=parrent_domain, main_url=f"http://{parrent_domain}/"
+        )
         crawler = ApiCrawler()
         stores = crawler.get_local_stores(local_stores_endpoint=LOCAL_STORES_ENDPOINT)
         if stores:
@@ -29,8 +34,6 @@ def fetch_local_stores(parrent_domain):
         else:
             logger.error(f"Failed requesting URL: {LOCAL_STORES_ENDPOINT}")
             pass
-    except EccommerceStore.DoesNotExist:
-        logger.error("No parrent EccommerceStore found. Quiting...")
 
 
 class Command(BaseCommand):
