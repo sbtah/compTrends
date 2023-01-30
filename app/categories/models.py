@@ -1,5 +1,7 @@
 from django.db import models
 from stores.models import EccommerceStore
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class Category(models.Model):
@@ -19,6 +21,7 @@ class Category(models.Model):
         EccommerceStore,
         on_delete=models.CASCADE,
     )
+    parrent_category_from_path = models.IntegerField(null=True)
     parrent_category = models.ForeignKey(
         "self", on_delete=models.SET_NULL, blank=True, null=True
     )
@@ -52,3 +55,10 @@ class CategoryExtraField(models.Model):
 
     def __str__(self):
         return self.field_name
+
+
+@receiver(pre_save, sender=Category)
+def create_category_from_path_pre_save(sender, instance, *args, **kwargs):
+    """Create category parrent id from category path."""
+    if instance.category_path:
+        instance.parrent_category_from_path = int(instance.category_path.split("/")[-2])
