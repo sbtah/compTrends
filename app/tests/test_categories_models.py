@@ -20,6 +20,7 @@ class TestCategoriesModels:
             name="Test Category",
             url="http://example-store.com/test-category/",
             parrent_store=e_store,
+            category_path="1/2/1574/1839/7251/4255",
         )
         assert models.Category.objects.all().count() == 1
         assert isinstance(category, models.Category) is True
@@ -29,6 +30,15 @@ class TestCategoriesModels:
 
         category = example_category
         assert str(category) == category.name
+
+    def test_category_pre_save_signal(self, example_category):
+        """
+        Test that save method properly saves parrent_category_from_path field.
+        """
+        category = example_category
+        assert category.parrent_category_from_path == int(
+            category.category_path.split("/")[-2]
+        )
 
     def test_create_category_extra_field_successful(self, example_category):
         """Test creating CategoryExtraField object is successful."""
