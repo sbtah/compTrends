@@ -1,9 +1,11 @@
 Django
 djangorestframework
 psycopg2
+python-dotenv
 drf-spectacular
 celery
 flower
+httpx
 lxml
 redis
 selenium
