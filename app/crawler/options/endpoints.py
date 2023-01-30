@@ -1,0 +1,48 @@
+import os
+from dotenv import load_dotenv
+
+
+# Get private data fron .env variable
+load_dotenv()
+
+
+# Local Stores.
+LOCAL_STORES_ENDPOINT = os.environ.get("LOCAL_STORES_ENDPOINT")
+
+# Products
+SINGLE_PRODUCT_BY_ID = os.environ.get("SINGLE_PRODUCT_BY_ID")
+SINGLE_PRODUCT_BY_ID_FOR_STORE_ID = os.environ.get(
+    "SINGLE_PRODUCT_BY_ID_FOR_STORE_ID",
+)
+
+# Category.
+SINGLE_CATEGORY_BY_ID = os.environ.get("SINGLE_CATEGORY_BY_ID")
+
+# Categories Discovery Url.
+
+# Default
+DEFAULT_CATEGORY = os.environ.get("DEFAULT_CATEGORY")
+
+# Budowa
+MAIN_CATEGORY_BUDOWA = os.environ.get("MAIN_CATEGORY_BUDOWA")
+CHILD_CATEGORIES_OF_BUDOWA = os.environ.get("CHILD_CATEGORIES_OF_BUDOWA")
+
+# Instalacje
+MAIN_CATEGORY_INSTALACJE = os.environ.get("MAIN_CATEGORY_INSTALACJE")
+CHILD_CATEGORIES_OF_INSTALACJE = os.environ.get("CHILD_CATEGORIES_OF_INSTALACJE")
+
+# Wykończenie
+MAIN_CATEGORY_WYKONCZENIE = os.environ.get("MAIN_CATEGORY_WYKONCZENIE")
+CHILD_CATEGORIES_OF_WYKONCZENIE = os.environ.get("CHILD_CATEGORIES_OF_WYKONCZENIE")
+
+# Urządzanie
+MAIN_CATEGORY_URZADZANIE = os.environ.get("MAIN_CATEGORY_URZADZANIE")
+CHILD_CATEGORIES_OF_URZADZANIE = os.environ.get("CHILD_CATEGORIES_OF_URZADZANIE")
+
+# Ogród
+MAIN_CATEGORY_OGROD = os.environ.get("MAIN_CATEGORY_OGROD")
+CHILD_CATEGORIES_OF_OGROD = os.environ.get("CHILD_CATEGORIES_OF_OGROD")
+
+# Narzędzia
+MAIN_CATEGORY_NARZEDZIA = os.environ.get("MAIN_CATEGORY_NARZEDZIA")
+CHILD_CATEGORIES_OF_NARZEDZIA = os.environ.get("CHILD_CATEGORIES_OF_NARZEDZIA")
