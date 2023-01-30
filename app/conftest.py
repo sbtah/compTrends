@@ -32,6 +32,7 @@ def example_category(example_eccommerce_store):
         name="Test Category",
         url="http://example-store.com/test-category/",
         parrent_store=e_store,
+        category_path="1/2/1574/1839/7251/4255",
     )
 
 
