@@ -1,4 +1,5 @@
 import pytest
+from datetime import date
 from stores.models import EccommerceStore, LocalStore
 from categories.models import Category
 from products.models import Product, ProductLocalData, ProductExtraField
@@ -45,6 +46,7 @@ def example_product(example_category, example_eccommerce_store):
         url="http://example.com/test-product-1",
         parrent_store=e_store,
         parrent_category=category,
+        last_scrape=date.today(),
     )
 
 
@@ -56,6 +58,7 @@ def example_product_local_data(example_product, example_local_store):
         parrent_product=product,
         parrent_local_store=local_store,
         name="Test Product",
+        last_scrape=date.today(),
     )
 
 
