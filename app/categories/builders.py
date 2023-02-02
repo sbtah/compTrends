@@ -16,7 +16,6 @@ def api_update_or_create_category(
     last_scrape,
 ):
     """Update or create Category object with data from API call."""
-    pass
 
     try:
         category = Category.objects.get(scraped_id=scraped_id)
@@ -58,6 +57,7 @@ def api_update_or_create_category(
         logger.info(
             f"Updating (last_scrape) for: {category} with {last_scrape}"  # noqa
         )
+        category.parrent_store = parrent_eccomerce_store
         category.save()
         logger.info(f"Updated Category: {category}")
     except Category.DoesNotExist:
