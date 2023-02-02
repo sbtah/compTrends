@@ -2,6 +2,7 @@
 Tests for Products models.
 """
 import pytest
+from datetime import date
 from products import models
 
 
@@ -24,6 +25,7 @@ class TestProductsModels:
             url="http://example.com/test-product-1",
             parrent_store=e_store,
             parrent_category=category,
+            last_scrape=date.today(),
         )
         assert models.Product.objects.all().count() == 1
         assert isinstance(product, models.Product) is True
@@ -48,6 +50,7 @@ class TestProductsModels:
             parrent_product=product,
             parrent_local_store=local_store,
             name="Test Product",
+            last_scrape=date.today(),
         )
         assert models.ProductLocalData.objects.all().count() == 1
         assert isinstance(product_local_data, models.ProductLocalData) is True
