@@ -20,7 +20,7 @@ from crawler.options.endpoints import (
 from django.core.management.base import BaseCommand
 from stores.models import EccommerceStore
 from utilites.logger import logger
-from django.utils import timezone
+from datetime import date
 
 
 main_categories_urls_to_discover = [
@@ -66,7 +66,7 @@ def discover_main_categories(parrent_domain):
                 children_category_count = category_data[0].get("children_count")
                 product_count = category_data[0].get("product_count")
                 parrent_store = parrent_e_store
-                last_scrape = timezone.now()
+                last_scrape = date.today()
                 api_update_or_create_category(
                     parrent_eccomerce_store=parrent_store,
                     name=name,
@@ -112,7 +112,7 @@ def discover_child_categories(parrent_domain):
                     children_category_count = category.get("children_count")
                     product_count = category.get("product_count")
                     parrent_store = parrent_e_store
-                    last_scrape = timezone.now()
+                    last_scrape = date.today()
                     api_update_or_create_category(
                         parrent_eccomerce_store=parrent_store,
                         name=name,
@@ -134,29 +134,38 @@ def discover_child_categories(parrent_domain):
 
 
 class Command(BaseCommand):
-    """Main class for command object that imports products from shoper."""
+    """Main class for command object that imports Categories from Api."""
 
     def add_arguments(self, parser):
         parser.add_argument(
             "parrent_store_domain",
             type=str,
-            help="Searches parrent EccommerceStore by domain. All created Localstores will be added as childs.",  # noqa
+            help="Searches parrent EccommerceStore by domain.",
         )
 
     def handle(self, *args, **options):
         """Custom handle method."""
 
         parrent_domain = options["parrent_store_domain"]
-
+        number_of_categories_start = Category.objects.all().count()
         self.stdout.write(
             self.style.WARNING(
-                f"Fetching Categories started. Current number of Categories: {Category.objects.all().count()}"  # noqa
+                f"""
+                Discovery of Categories started ...
+                Current number of Categories: {number_of_categories_start}
+                """
             )
         )
-        # discover_main_categories(parrent_domain=parrent_domain)
+        discover_main_categories(parrent_domain=parrent_domain)
         discover_child_categories(parrent_domain=parrent_domain)
+        number_of_categories_finish = Category.objects.all().count()
+        new_categories = number_of_categories_finish - number_of_categories_start
         self.stdout.write(
             self.style.SUCCESS(
-                f"Fetching Categories finished. Current number of Categories: {Category.objects.all().count()}"  # noqa
+                f"""
+                Discovery of Categories finished.
+                Current number of Categories: {number_of_categories_finish}
+                Found: {new_categories} new Categories since last discovery process. 
+                """
             )
         )
