@@ -16,47 +16,17 @@ def api_update_or_create_category(
     last_scrape,
 ):
     """Update or create Category object with data from API call."""
-
     try:
         category = Category.objects.get(scraped_id=scraped_id)
-        if category.name != name:
-            category.name = name
-            logger.info(f"Updating (name) for: {category} with {name}")
-        if category.url != url:
-            category.url = url
-            logger.info(f"Updating (url) for: {category} with {url}")
-        if category.api_url != api_url:
-            category.api_url = api_url
-            logger.info(f"Updating (api_url) for: {category} with {api_url}")
-        if category.meta_title != meta_title:
-            category.meta_title = meta_title
-            logger.info(
-                f"Updating (meta_title) for: {category} with {meta_title}",
-            )
-        if category.category_path != category_path:
-            category.category_path = category_path
-            logger.info(
-                f"Updating (category_path) for: {category} with {category_path}",
-            )
-        if category.category_level != category_level:
-            category.category_level = category_level
-            logger.info(
-                f"Updating (category_level) for: {category} with {category_level}"  # noqa
-            )
-        if category.children_category_count != children_category_count:
-            category.children_category_count = children_category_count
-            logger.info(
-                f"Updating (children_category_count) for: {category} with {children_category_count}"  # noqa
-            )
-        if category.product_count != product_count:
-            category.product_count = product_count
-            logger.info(
-                f"Updating (product_count) for: {category} with {product_count}"  # noqa
-            )
+        category.name = name
+        category.url = url
+        category.api_url = api_url
+        category.meta_title = meta_title
+        category.category_path = category_path
+        category.category_level = category_level
+        category.children_category_count = children_category_count
+        category.product_count = product_count
         category.last_scrape = last_scrape
-        logger.info(
-            f"Updating (last_scrape) for: {category} with {last_scrape}"  # noqa
-        )
         category.parrent_store = parrent_eccomerce_store
         category.save()
         logger.info(f"Updated Category: {category}")
