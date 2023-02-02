@@ -8,35 +8,43 @@ class Product(models.Model):
 
     name = models.CharField(max_length=255)
     url = models.URLField(max_length=255, unique=True)
-
-    api_url = models.URLField(max_length=255, blank=True)
     scraped_id = models.IntegerField(null=True)
+    api_url = models.URLField(max_length=255, blank=True)
+    short_description = models.TextField(blank=True)
+
     sku = models.CharField(max_length=50, blank=True)
     ean = models.CharField(max_length=50, blank=True)
     brand_name = models.CharField(max_length=50, blank=True)
+    promotion = models.BooleanField(default=False)
+
     default_price = models.DecimalField(
         blank=True,
         null=True,
         max_digits=7,
         decimal_places=2,
     )
-    default_price = models.DecimalField(
+    promo_price = models.DecimalField(
         blank=True,
         null=True,
         max_digits=7,
         decimal_places=2,
     )
+
     unit_type = models.CharField(max_length=10, blank=True)
     conversion = models.CharField(max_length=10, blank=True)
     conversion_unit = models.CharField(max_length=10, blank=True)
     qty_per_package = models.IntegerField(null=True)
     tax_rate = models.CharField(max_length=10, blank=True)
-    category_path = models.CharField(max_length=50, blank=True)
+    parrent_category_from_path = models.IntegerField(null=True)
     parrent_store = models.ForeignKey(
         EccommerceStore,
         on_delete=models.CASCADE,
     )
-    parrent_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    parrent_category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -66,7 +74,15 @@ class ProductLocalData(models.Model):
     availability = models.CharField(max_length=10, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    last_scrape = models.DateTimeField(blank=True, null=True)
+    last_scrape = models.DateTimeField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["parrent_product", "parrent_local_store", "last_scrape"],
+                name="Unique ProductLocalData",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.parrent_local_store.name}: {self.name}"
