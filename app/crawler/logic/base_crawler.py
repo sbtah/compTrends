@@ -36,7 +36,7 @@ class BaseApiCrawler:
         """
         headers = {"User-Agent": f"{self.user_agent}"}
         try:
-            res = httpx.get(url, timeout=10, headers=headers)
+            res = httpx.get(url, timeout=30, headers=headers)
             random_sleep_small()
             return res.json()
         except httpx._exceptions.TimeoutException:
@@ -62,7 +62,7 @@ class BaseApiCrawler:
         try:
             res = await client.get(url, headers=headers)
             await asyncio.sleep(0.5)
-            return res
+            return res.json()
         except Exception as e:
             self.logger.error(f"(async_get) Exception: {e}")
             return None
