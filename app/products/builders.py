@@ -125,7 +125,6 @@ def api_update_or_create_product_local_data(
     last_scrape,
 ):
     try:
-        # Poll.objects.get(Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)))
         product_local_data = ProductLocalData.objects.get(
             Q(parrent_local_store=parrent_local_store)
             & Q(parrent_product=parrent_product)
