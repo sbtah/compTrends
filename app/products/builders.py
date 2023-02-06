@@ -8,6 +8,7 @@ def api_update_or_create_product(
     name,
     url,
     scraped_id,
+    type_id,
     api_url,
     short_description,
     sku,
@@ -31,6 +32,7 @@ def api_update_or_create_product(
         product = Product.objects.get(scraped_id=scraped_id)
         product.name = name
         product.url = url
+        product.type_id = type_id
         product.api_url = api_url
         product.short_description = short_description
         product.sku = sku
@@ -64,6 +66,7 @@ def api_update_or_create_product(
                 name=name,
                 url=url,
                 scraped_id=scraped_id,
+                type_id=type_id,
                 api_url=api_url,
                 short_description=short_description,
                 sku=sku,
@@ -90,6 +93,7 @@ def api_update_or_create_product(
                 name=name,
                 url=url,
                 scraped_id=scraped_id,
+                type_id=type_id,
                 api_url=api_url,
                 short_description=short_description,
                 sku=sku,
@@ -120,6 +124,7 @@ def api_update_or_create_product_local_data(
     local_store_scraped_id,
     name,
     price,
+    type_id,
     quantity,
     stock_status,
     availability,
@@ -137,6 +142,7 @@ def api_update_or_create_product_local_data(
         product_local_data.local_store_scraped_id = local_store_scraped_id
         product_local_data.name = name
         product_local_data.price = price
+        product_local_data.type_id = type_id
         product_local_data.quantity = quantity
         product_local_data.stock_status = stock_status
         product_local_data.availability = availability
@@ -151,6 +157,7 @@ def api_update_or_create_product_local_data(
             local_store_scraped_id=local_store_scraped_id,
             name=name,
             price=price,
+            type_id=type_id,
             quantity=quantity,
             stock_status=stock_status,
             availability=availability,
