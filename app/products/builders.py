@@ -2,7 +2,6 @@ from products.models import Product, ProductLocalData, ProductExtraField
 from categories.models import Category
 from utilites.logger import logger
 from django.db.models import Q
-import datetime
 
 
 def api_update_or_create_product(
@@ -116,7 +115,9 @@ def api_update_or_create_product(
 
 def api_update_or_create_product_local_data(
     parrent_product,
-    parrent_local_store,
+    parrent_product_scraped_id,
+    local_store_name,
+    local_store_scraped_id,
     name,
     price,
     quantity,
@@ -126,9 +127,53 @@ def api_update_or_create_product_local_data(
 ):
     try:
         product_local_data = ProductLocalData.objects.get(
-            Q(parrent_local_store=parrent_local_store)
+            Q(local_store_name=local_store_name)
             & Q(parrent_product=parrent_product)
             & Q(last_scrape=last_scrape)
         )
+        product_local_data.parrent_product = parrent_product
+        product_local_data.parrent_product_scraped_id = parrent_product_scraped_id
+        product_local_data.local_store_name = local_store_name
+        product_local_data.local_store_scraped_id = local_store_scraped_id
+        product_local_data.name = name
+        product_local_data.price = price
+        product_local_data.quantity = quantity
+        product_local_data.stock_status = stock_status
+        product_local_data.availability = availability
+        product_local_data.last_scrape = last_scrape
+        product_local_data.save()
+        logger.info(f"Updated ProductLocalData: {product_local_data}")
     except ProductLocalData.DoesNotExist:
-        pass
+        product_local_data = ProductLocalData.objects.create(
+            parrent_product=parrent_product,
+            parrent_product_scraped_id=parrent_product_scraped_id,
+            local_store_name=local_store_name,
+            local_store_scraped_id=local_store_scraped_id,
+            name=name,
+            price=price,
+            quantity=quantity,
+            stock_status=stock_status,
+            availability=availability,
+            last_scrape=last_scrape,
+        )
+        logger.info(f"Created ProductLocalData: {product_local_data}")
+    return product_local_data
+
+
+def validate_product_active(product_url, response):
+    """
+    Validate Product by URL. If response is 200,
+        it means that Product is active.
+    """
+    try:
+        product = Product.objects.get(url=product_url)
+        if response.status_code == 200:
+            product.is_active = True
+            product.save()
+            logger.info(f"Product: {product} was set to: ACTIVE")
+        else:
+            product.is_active = False
+            product.save()
+            logger.info(f"Product: {product} was set to: INACTIVE")
+    except Product.DoesNotExist:
+        logger.error(f"Cannot find Product with url: {product_url}!")
