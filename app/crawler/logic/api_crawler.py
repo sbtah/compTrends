@@ -36,6 +36,29 @@ class ApiCrawler(BaseApiCrawler):
         """
         pass
 
+    async def get_products_by_urls(
+        self,
+        iterator_of_urls: Iterator[str],
+    ) -> httpx.Response:
+        """
+        Sends requests to Product url asynchronously.
+        - :arg iterator_of_urls: Iterator of Product URLS
+            that will be used while sending requests.
+        """
+        async with httpx.AsyncClient() as client:
+            tasks = []
+            for url in iterator_of_urls:
+                tasks.append(
+                    asyncio.ensure_future(
+                        self.async_get_response(
+                            client,
+                            url,
+                        )
+                    )
+                )
+            products = await asyncio.gather(*tasks)
+            return products
+
     async def get_products_by_ids(
         self,
         range_of_product_ids: Iterator[int],
@@ -61,7 +84,7 @@ class ApiCrawler(BaseApiCrawler):
             products = await asyncio.gather(*tasks)
             return products
 
-    async def get_products_by_ids_for_local_store(
+    async def get_products_by_ids_for_all_local_stores(
         self,
         product_id: int,
         single_product_by_id_for_store_id_url: str,
@@ -78,6 +101,36 @@ class ApiCrawler(BaseApiCrawler):
         async with httpx.AsyncClient() as client:
             tasks = []
             for store_id in iterator_of_stores_ids:
+                tasks.append(
+                    asyncio.ensure_future(
+                        self.async_get(
+                            client,
+                            single_product_by_id_for_store_id_url.format(
+                                store_id, product_id
+                            ),
+                        )
+                    )
+                )
+            data = await asyncio.gather(*tasks)
+            return data
+
+    async def get_products_by_ids_for_local_store(
+        self,
+        store_id: int,
+        single_product_by_id_for_store_id_url: str,
+        iterator_of_product_ids: Iterator[int],
+    ) -> Future[Dict]:
+        """
+        Sends requests to SINGLE_PRODUCT_BY_ID_FOR_STORE_ID asynchronously.
+        - :arg store_id: Integer (ID) of LocalStore.
+        - :arg single_product_by_id_for_store_id_url: Api URL
+            for for Product Data for Local Store.
+        - :arg iterator_of_product_ids: Iterator of integers (Products IDs)
+            that will be used while sending requests.
+        """
+        async with httpx.AsyncClient() as client:
+            tasks = []
+            for product_id in iterator_of_product_ids:
                 tasks.append(
                     asyncio.ensure_future(
                         self.async_get(
