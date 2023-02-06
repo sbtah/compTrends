@@ -56,7 +56,8 @@ def example_product_local_data(example_product, example_local_store):
     local_store = example_local_store
     return ProductLocalData.objects.create(
         parrent_product=product,
-        parrent_local_store=local_store,
+        local_store_name=local_store.name,
+        local_store_scraped_id=local_store.scraped_id,
         name="Test Product",
         last_scrape=date.today(),
     )
