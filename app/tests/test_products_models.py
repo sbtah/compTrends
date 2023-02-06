@@ -23,6 +23,7 @@ class TestProductsModels:
         product = models.Product.objects.create(
             name="Test Product",
             url="http://example.com/test-product-1",
+            scraped_id=777,
             parrent_store=e_store,
             parrent_category=category,
             last_scrape=date.today(),
@@ -48,7 +49,9 @@ class TestProductsModels:
         assert models.ProductLocalData.objects.all().count() == 0
         product_local_data = models.ProductLocalData.objects.create(
             parrent_product=product,
-            parrent_local_store=local_store,
+            parrent_product_scraped_id=777,
+            local_store_name=local_store.name,
+            local_store_scraped_id=local_store.scraped_id,
             name="Test Product",
             last_scrape=date.today(),
         )
@@ -61,7 +64,7 @@ class TestProductsModels:
         product_local_data = example_product_local_data
         assert (
             str(product_local_data)
-            == f"{product_local_data.parrent_local_store.name}: {product_local_data.name}"  # noqa
+            == f"{product_local_data.local_store_name}: {product_local_data.name}"  # noqa
         )
 
     def test_create_product_extra_field_successful(self, example_product):
