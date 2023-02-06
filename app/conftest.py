@@ -44,6 +44,7 @@ def example_product(example_category, example_eccommerce_store):
     return Product.objects.create(
         name="Test Product",
         url="http://example.com/test-product-1",
+        scraped_id=777,
         parrent_store=e_store,
         parrent_category=category,
         last_scrape=date.today(),
@@ -56,6 +57,7 @@ def example_product_local_data(example_product, example_local_store):
     local_store = example_local_store
     return ProductLocalData.objects.create(
         parrent_product=product,
+        parrent_product_scraped_id=777,
         local_store_name=local_store.name,
         local_store_scraped_id=local_store.scraped_id,
         name="Test Product",
