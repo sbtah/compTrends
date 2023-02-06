@@ -1,0 +1,42 @@
+{% extends 'admin/base.html' %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+    :root {
+        --primary: #1d1d1b;
+        --secondary: #1d1d1b;
+        --link-fg: #1c67c1;
+        --link-selected-fg: #14c9d5;
+    }
+
+
+    #header {
+        padding-top: 1.4rem;
+        padding-bottom: 1.4rem;
+    }
+
+    .section {
+        color: #14c9d5 !important;
+    }
+
+    .module caption {
+        padding-top: 1.4rem;
+        padding-bottom: 1.4rem;
+    }
+
+    #site-name a {
+        color: #14c9d5 !important;
+        font-weight: bold;
+    }
+
+    .addlink {
+        color: #ff11c7 !important;
+    }
+</style>
+{% endblock %}
+
+
+<!-- --clr-white: #ffffff;
+  --clr-dark: #1d1d1b;
+  --clr-accentFirst: #ff11c7;
+  --clr-accentSecond: #58effb; -->
