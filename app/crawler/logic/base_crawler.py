@@ -1,5 +1,5 @@
 from random import choice
-from typing import List
+from typing import List, Tuple
 import asyncio
 import httpx
 from crawler.helpers.randoms import random_sleep_small
@@ -61,8 +61,23 @@ class BaseApiCrawler:
         headers = {"User-Agent": f"{self.user_agent}"}
         try:
             res = await client.get(url, headers=headers)
-            await asyncio.sleep(0.5)
             return res.json()
+        except Exception as e:
+            self.logger.error(f"(async_get) Exception: {e}")
+            return None
+
+    async def async_get_response_for_url(
+        self, client: httpx.AsyncClient, url: str
+    ) -> Tuple[str, str]:
+        """
+        Requests specified URL asynchronously. Returns Response.
+        - :arg client: Asynchronous client.
+        - :arg url: Requested URL.
+        """
+        headers = {"User-Agent": f"{self.user_agent}"}
+        try:
+            res = await client.get(url, headers=headers)
+            return (url, res)
         except Exception as e:
             self.logger.error(f"(async_get) Exception: {e}")
             return None
