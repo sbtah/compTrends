@@ -1,5 +1,5 @@
 import time
-from app.utilites.logger import logger
+from utilites.logger import logger
 
 
 def calculate_time(func):
