@@ -10,7 +10,7 @@ class Product(models.Model):
     url = models.URLField(max_length=255, unique=True, db_index=True)
     scraped_id = models.IntegerField(unique=True, db_index=True)
 
-    type_id = models.CharField(max_length=100)
+    type_id = models.CharField(max_length=100, blank=True)
     api_url = models.URLField(max_length=255, blank=True)
     short_description = models.TextField(blank=True)
 
@@ -71,7 +71,7 @@ class ProductLocalData(models.Model):
         max_digits=7,
         decimal_places=2,
     )
-    type_id = models.CharField(max_length=100)
+    type_id = models.CharField(max_length=100, blank=True)
     quantity = models.IntegerField(null=True)
     stock_status = models.IntegerField(null=True)
     availability = models.CharField(max_length=10, blank=True)
