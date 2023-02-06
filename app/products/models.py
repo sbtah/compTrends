@@ -1,14 +1,16 @@
 from django.db import models
 from categories.models import Category
-from stores.models import EccommerceStore, LocalStore
+from stores.models import EccommerceStore
 
 
 class Product(models.Model):
     """Product object."""
 
     name = models.CharField(max_length=255)
-    url = models.URLField(max_length=255, unique=True)
-    scraped_id = models.IntegerField(null=True)
+    url = models.URLField(max_length=255, unique=True, db_index=True)
+    scraped_id = models.IntegerField(unique=True, db_index=True)
+
+    type_id = models.CharField(max_length=100)
     api_url = models.URLField(max_length=255, blank=True)
     short_description = models.TextField(blank=True)
 
@@ -58,10 +60,10 @@ class ProductLocalData(models.Model):
     """ProductLocalData object."""
 
     parrent_product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    parrent_local_store = models.ForeignKey(
-        LocalStore,
-        on_delete=models.CASCADE,
-    )
+    parrent_product_scraped_id = models.IntegerField()
+    local_store_name = models.CharField(max_length=255)
+    local_store_scraped_id = models.IntegerField()
+
     name = models.CharField(max_length=255)
     price = models.DecimalField(
         blank=True,
@@ -69,6 +71,7 @@ class ProductLocalData(models.Model):
         max_digits=7,
         decimal_places=2,
     )
+    type_id = models.CharField(max_length=100)
     quantity = models.IntegerField(null=True)
     stock_status = models.IntegerField(null=True)
     availability = models.CharField(max_length=10, blank=True)
@@ -79,13 +82,14 @@ class ProductLocalData(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["parrent_product", "parrent_local_store", "last_scrape"],
+                fields=["parrent_product", "local_store_name", "last_scrape"],
                 name="Unique ProductLocalData",
             ),
         ]
+        verbose_name_plural = "Product Local Data"
 
     def __str__(self):
-        return f"{self.parrent_local_store.name}: {self.name}"
+        return f"{self.local_store_name}: {self.name}"
 
 
 class ProductExtraField(models.Model):
