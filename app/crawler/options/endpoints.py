@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 # Get private data fron .env variable
 load_dotenv()
 
+DOMAIN = os.environ.get("DOMAIN")
 
 # Local Stores.
 LOCAL_STORES_ENDPOINT = os.environ.get("LOCAL_STORES_ENDPOINT")
