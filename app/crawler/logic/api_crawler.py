@@ -50,7 +50,7 @@ class ApiCrawler(BaseApiCrawler):
             for url in iterator_of_urls:
                 tasks.append(
                     asyncio.ensure_future(
-                        self.async_get_response(
+                        self.async_get_response_for_url(
                             client,
                             url,
                         )
