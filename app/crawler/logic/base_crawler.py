@@ -70,7 +70,8 @@ class BaseApiCrawler:
         self, client: httpx.AsyncClient, url: str
     ) -> Tuple[str, str]:
         """
-        Requests specified URL asynchronously. Returns Response.
+        Requests specified URL asynchronously.
+        Returns Response and requested URL.
         - :arg client: Asynchronous client.
         - :arg url: Requested URL.
         """
