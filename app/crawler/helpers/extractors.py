@@ -52,7 +52,7 @@ def product_data_extract(product_response):
     """
     Extract and clean Product data. Returns data ready to be saved to database.
     """
-    name = product_response.get("data").get("name")
+    name = product_response.get("data").get("name").strip()
     url = product_response.get("data").get("url_path")
     type_id = product_response.get("data").get("type_id")
     scraped_id = product_response.get("data").get("entity_id")
