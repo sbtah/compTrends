@@ -56,7 +56,7 @@ class BaseOperator:
             )
             return None
 
-    def create_directory(self, directory):
+    def create_directory(self, directory: pathlib.PosixPath):
         """
         Creates directory for specified path.
         """
@@ -77,7 +77,11 @@ class BaseOperator:
             )
             return None
 
-    def search_directory_for_file(self, directory, filename):
+    def search_directory_for_file(
+        self,
+        directory: pathlib.PosixPath,
+        filename: str,
+    ):
         """
         Searches for a file in specified directory.
         Returns a path to a file if successful.
@@ -87,7 +91,7 @@ class BaseOperator:
             for file in list_dir:
                 if filename == file:
                     self.logger.info(f"Found directory for a file: {filename}")
-                    return os.path.abspath(file)
+                    return directory / file
                 else:
                     self.logger.error(
                         f"Cannot find {filename} in {directory} directory."
@@ -99,50 +103,25 @@ class BaseOperator:
             )
             return None
 
-    def create_xlsx_file_for_date(self, directory, filename):
-        """
-        Create an empty XLSX file in specified directory.
-        - :arg directory: Path in which file should be stored.
-        - :arg filename: Name of the created file.
-        - :arg date_str: Date that will be appended to a filename.
-        """
-        if isinstance(directory, pathlib.PosixPath):
-            filepath = directory / f"{filename}"
-            if os.path.exists(filepath):
-                self.logger.info(f"Failed creating a file. File aready exists.")
-                return True
-            else:
-                wb = openpyxl.Workbook()
-                try:
-                    wb.save(filepath)
-                    self.logger.info(f"Created file: '{filepath}")
-                    return True
-                except FileNotFoundError:
-                    self.logger.error("Cannot find specified directory...")
-                    return None
-                except Exception as e:
-                    self.logger.error(
-                        f"(find_or_create_xlsx_file) Some other exception: {e}"
-                    )
-                    return None
-        else:
-            self.logger.error(
-                f"Wrong directory provided. Received: {type(directory)}, should be path."
-            )
-            return None
-
-    def open_xlsx_file_for_date(self, directory, filename):
+    def open_xlsx_file(self, directory: pathlib.PosixPath):
         """
         Open specified file for specified date in provided directory.
         Uses pandas library, returns DataFrame object.
         """
-        filepath = directory / f"{filename}"
-        try:
-            frame = pd.read_excel(filepath)
-            return frame
-        except FileNotFoundError:
-            self.logger.error("Specified xlsx file was not found.")
-            return None
-        except Exception as e:
-            self.logger.error(f"(open_xlsx_file_for_date) Some other exception: {e}")
+        if isinstance(directory, pathlib.PosixPath):
+            try:
+                frame = pd.read_excel(directory)
+                return frame
+            except FileNotFoundError:
+                self.logger.error("Specified xlsx file was not found.")
+                return None
+            except Exception as e:
+                self.logger.error(
+                    f"(open_xlsx_file_for_date) Some other exception: {e}"
+                )
+                return None
+        else:
+            self.logger.error(
+                f"Wrong directory provided. Received: {type(directory)}, should be path."
+            )
             return None
