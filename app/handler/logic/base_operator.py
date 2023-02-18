@@ -21,15 +21,15 @@ class BaseOperator:
         self.time_started = datetime.today()
 
     @property
-    def current_day_month_year(self):
+    def current_day_month_year(self) -> str:
         return self.time_started.strftime(self.DAY_DATE_FORMAT)
 
     @property
-    def current_month_year(self):
+    def current_month_year(self) -> str:
         return self.time_started.strftime(self.MONTH_DATE_FORMAT)
 
     @property
-    def current_year(self):
+    def current_year(self) -> str:
         return self.time_started.strftime(self.YEAR_DATE_FORMAT)
 
     def find_directory(self, directory: pathlib.PosixPath) -> pathlib.PosixPath:
@@ -103,9 +103,9 @@ class BaseOperator:
             )
             return None
 
-    def open_xlsx_file(self, directory: pathlib.PosixPath):
+    def open_xlsx_file(self, directory: pathlib.PosixPath) -> pd.DataFrame:
         """
-        Open specified file for specified date in provided directory.
+        Open specified file in provided directory.
         Uses pandas library, returns DataFrame object.
         """
         if isinstance(directory, pathlib.PosixPath):
