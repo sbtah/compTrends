@@ -1,10 +1,10 @@
 from random import choice
 from typing import List, Tuple
-import asyncio
+
 import httpx
 from crawler.helpers.randoms import random_sleep_small
-from utilities.logger import logger
 from crawler.options.settings import USER_AGENTS
+from utilities.logger import logger
 
 
 class BaseApiCrawler:

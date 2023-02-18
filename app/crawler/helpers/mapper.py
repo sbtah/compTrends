@@ -14,6 +14,8 @@ def generate_ids_map_from_file():
 
         cleaned_list = [int(x.replace("\n", "")) for x in ids]
         stp = 50
-        genex = (cleaned_list[i : i + stp] for i in range(0, len(cleaned_list), stp))
+        genex = (
+            cleaned_list[i : i + stp] for i in range(0, len(cleaned_list), stp)  # noqa
+        )  # noqa
 
         return genex

@@ -14,7 +14,8 @@ class Command(BaseCommand):
             self.style.WARNING(
                 f"""
                 Discovery of LocalStores started ...
-                Current number of LocalStores: {number_of_local_stores_start}
+                Current number of LocalStores:
+                 - {number_of_local_stores_start}
                 """
             )
         )
@@ -22,13 +23,17 @@ class Command(BaseCommand):
         DataApiScraper().scrape_local_stores()
 
         number_of_local_stores_finish = LocalStore.objects.all().count()
-        new_stores = number_of_local_stores_finish - number_of_local_stores_start
+        new_stores = (
+            number_of_local_stores_finish - number_of_local_stores_start
+        )  # noqa
         self.stdout.write(
             self.style.SUCCESS(
                 f"""
                 Discovery of LocalStores finished.
-                Current number of LocalStores: {number_of_local_stores_finish}
-                Found: {new_stores} new LocalStores since last discovery process
+                Current number of LocalStores:
+                 - {number_of_local_stores_finish}
+                Found:
+                - {new_stores} new LocalStores since last discovery process
                 """
             )
         )

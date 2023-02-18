@@ -25,7 +25,6 @@ from crawler.options.endpoints import (
     MAIN_CATEGORY_OGROD,
     MAIN_CATEGORY_URZADZANIE,
     MAIN_CATEGORY_WYKONCZENIE,
-    SINGLE_CATEGORY_BY_ID,
     SINGLE_PRODUCT_BY_ID,
     SINGLE_PRODUCT_BY_ID_FOR_STORE_ID,
 )
@@ -91,7 +90,9 @@ class DataApiScraper(ApiCrawler):
             is_active=True,
         )
         products_ids = [product.scraped_id for product in products]
-        return [products_ids[x : x + stp] for x in range(0, len(products_ids), stp)]
+        return [
+            products_ids[x : x + stp] for x in range(0, len(products_ids), stp)  # noqa
+        ]  # noqa
 
     def generate_list_of_products_urls_list(self):
         """
@@ -102,7 +103,9 @@ class DataApiScraper(ApiCrawler):
             parrent_store__domain=self.DOMAIN,
         )
         products_ids = [product.url for product in products]
-        return [products_ids[x : x + stp] for x in range(0, len(products_ids), stp)]
+        return [
+            products_ids[x : x + stp] for x in range(0, len(products_ids), stp)  # noqa
+        ]  # noqa
 
     @calculate_time
     def scrape_local_stores(self):
@@ -132,8 +135,8 @@ class DataApiScraper(ApiCrawler):
                         )
                 else:
                     self.logger.error(
-                        f"Received wrong response from: get_local_stores."
-                    )
+                        "Received wrong response from: get_local_stores."
+                    )  # noqa
                     pass
             else:
                 self.logger.error(
@@ -152,7 +155,9 @@ class DataApiScraper(ApiCrawler):
                 category_data = self.get(url=main_category_url)
                 if category_data:
                     if isinstance(category_data, list):
-                        data = category_data_extract(category_response=category_data[0])
+                        data = category_data_extract(
+                            category_response=category_data[0]
+                        )  # noqa
                         api_update_or_create_category(
                             parrent_eccomerce_store=parrent_e_store,
                             name=data.get("name"),
@@ -162,7 +167,9 @@ class DataApiScraper(ApiCrawler):
                             meta_title=data.get("meta_title"),
                             category_path=data.get("category_path"),
                             category_level=data.get("category_level"),
-                            children_category_count=data.get("children_category_count"),
+                            children_category_count=data.get(
+                                "children_category_count"
+                            ),  # noqa
                             product_count=data.get("product_count"),
                             last_scrape=data.get("last_scrape"),
                         )
@@ -172,7 +179,9 @@ class DataApiScraper(ApiCrawler):
                         )
                         pass
                 else:
-                    self.logger.error(f"Failed requesting URL: {main_category_url}")
+                    self.logger.error(
+                        f"Failed requesting URL: {main_category_url}"
+                    )  # noqa
                     pass
         except EccommerceStore.DoesNotExist:
             self.logger.error("No parrent EccommerceStore found. Quiting...")
@@ -209,11 +218,13 @@ class DataApiScraper(ApiCrawler):
                             )
                     else:
                         self.logger.error(
-                            f"Received wrong response type: {child_categories_response}"
+                            f"Received wrong response type: {child_categories_response}"  # noqa
                         )
                         pass
                 else:
-                    self.logger.error(f"Failed requesting URL: {child_category_url}")
+                    self.logger.error(
+                        f"Failed requesting URL: {child_category_url}"
+                    )  # noqa
                     pass
         except EccommerceStore.DoesNotExist:
             self.logger.error("No parrent EccommerceStore found. Quiting...")
@@ -240,12 +251,12 @@ class DataApiScraper(ApiCrawler):
                         if isinstance(product_data, dict):
                             if "ins" in product_data.get("data").get("sku"):
                                 self.logger.info(
-                                    f'Found wrong SKU:{product_data.get("data").get("sku")}. Passing...'
+                                    f'Found wrong SKU:{product_data.get("data").get("sku")}. Passing...'  # noqa
                                 )
                                 pass
                             elif "enc" in product_data.get("data").get("sku"):
                                 self.logger.info(
-                                    f'Found wrong SKU:{product_data.get("data").get("sku")}. Passing...'
+                                    f'Found wrong SKU:{product_data.get("data").get("sku")}. Passing...'  # noqa
                                 )
                                 pass
                             else:
@@ -258,7 +269,9 @@ class DataApiScraper(ApiCrawler):
                                     type_id=data.get("type_id"),
                                     scraped_id=data.get("scraped_id"),
                                     api_url=data.get("api_url"),
-                                    short_description=data.get("short_description"),
+                                    short_description=data.get(
+                                        "short_description"
+                                    ),  # noqa
                                     sku=data.get("sku"),
                                     ean=data.get("ean"),
                                     brand_name=data.get("brand_name"),
@@ -267,8 +280,8 @@ class DataApiScraper(ApiCrawler):
                                     promo_price=data.get("promo_price"),
                                     unit_type=data.get("unit_type"),
                                     conversion=data.get("conversion"),
-                                    conversion_unit=data.get("conversion_unit"),
-                                    qty_per_package=data.get("qty_per_package"),
+                                    conversion_unit=data.get("conversion_unit"),  # noqa
+                                    qty_per_package=data.get("qty_per_package"),  # noqa
                                     tax_rate=data.get("tax_rate"),
                                     parrent_category_from_path=data.get(
                                         "parrent_category_from_path"
@@ -282,7 +295,9 @@ class DataApiScraper(ApiCrawler):
                             )
                             pass
                     else:
-                        self.logger.error("Received no response for Product URL...")
+                        self.logger.error(
+                            "Received no response for Product URL..."
+                        )  # noqa
                         pass
         except EccommerceStore.DoesNotExist:
             self.logger.error("No parrent EccommerceStore found. Quiting...")
@@ -302,7 +317,7 @@ class DataApiScraper(ApiCrawler):
                 product_local_data_feature = asyncio.run(
                     self.get_products_by_ids_for_local_store(
                         store_id=store_id,
-                        single_product_by_id_for_store_id_url=self.SINGLE_PRODUCT_BY_ID_FOR_STORE_ID,
+                        single_product_by_id_for_store_id_url=self.SINGLE_PRODUCT_BY_ID_FOR_STORE_ID,  # noqa
                         iterator_of_product_ids=ids_list,
                     )
                 )
@@ -321,9 +336,9 @@ class DataApiScraper(ApiCrawler):
                                 )
                                 api_update_or_create_product_local_data(
                                     parrent_product=parrent_product,
-                                    parrent_product_scraped_id=parrent_product.scraped_id,
+                                    parrent_product_scraped_id=parrent_product.scraped_id,  # noqa
                                     local_store_name=parrent_local_store.name,
-                                    local_store_scraped_id=parrent_local_store.scraped_id,
+                                    local_store_scraped_id=parrent_local_store.scraped_id,  # noqa
                                     name=data.get("name"),
                                     price=data.get("price"),
                                     type_id=data.get("type"),
@@ -334,12 +349,12 @@ class DataApiScraper(ApiCrawler):
                                 )
                             except Exception as e:
                                 self.logger.error(
-                                    f"(scrape_product_local_data) Some other exception: {e}"
+                                    f"(scrape_product_local_data) Some other exception: {e}"  # noqa
                                 )
                                 raise
                         else:
                             self.logger.error(
-                                f"Received wrong response type: {product_local_data}"
+                                f"Received wrong response type: {product_local_data}"  # noqa
                             )
                             pass
                     else:
@@ -365,5 +380,6 @@ class DataApiScraper(ApiCrawler):
             for product_response in products_iterator:
                 if product_response:
                     validate_product_active(
-                        product_url=product_response[0], response=product_response[1]
+                        product_url=product_response[0],
+                        response=product_response[1],  # noqa
                     )

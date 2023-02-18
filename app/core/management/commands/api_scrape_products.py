@@ -28,7 +28,8 @@ class Command(BaseCommand):
                 f"""
                 Discovery of Products finished. 
                 Current number of Products: {number_of_products_finish}
-                Found: {new_products} new Products since last discovery process.
+                Found:
+                 - {new_products} new Products since last discovery process.
                 """
             )
         )

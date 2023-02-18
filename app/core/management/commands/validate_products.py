@@ -9,9 +9,9 @@ class Command(BaseCommand):
         """Custom handle method."""
 
         self.stdout.write(
-            self.style.WARNING(f"Validation process for Products started.")
+            self.style.WARNING("Validation process for Products started.")
         )
         DataApiScraper().validate_products_urls()
         self.stdout.write(
-            self.style.SUCCESS(f"Validation process for Products finished.")
+            self.style.SUCCESS("Validation process for Products finished.")
         )

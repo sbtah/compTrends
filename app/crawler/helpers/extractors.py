@@ -18,7 +18,8 @@ def local_store_data_extract(store_response):
 
 def category_data_extract(category_response):
     """
-    Extract and clean Category data. Returns data ready to be saved to database.
+    Extract and clean Category data.
+    Returns data ready to be saved to database.
     """
     name = category_response.get("name")
     url = category_response.get("url")
@@ -75,7 +76,8 @@ def product_data_extract(product_response):
     )
     promotion = (
         False
-        if product_response.get("data").get("info_boxes").get("promo_price") is None
+        if product_response.get("data").get("info_boxes").get("promo_price")
+        is None  # noqa
         else True
     )
     default_price = product_response.get("data").get("default_price")

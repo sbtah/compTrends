@@ -18,18 +18,19 @@ class Command(BaseCommand):
                 """
             )
         )
-
         DataApiScraper().scrape_main_categories()
         DataApiScraper().scrape_child_categories()
-
         number_of_categories_finish = Category.objects.all().count()
-        new_categories = number_of_categories_finish - number_of_categories_start
+        new_categories = (
+            number_of_categories_finish - number_of_categories_start
+        )  # noqa
         self.stdout.write(
             self.style.SUCCESS(
                 f"""
                 Discovery of Categories finished.
                 Current number of Categories: {number_of_categories_finish}
-                Found: {new_categories} new Categories since last discovery process. 
+                Found:
+                - {new_categories} new Categories since last discovery. 
                 """
             )
         )

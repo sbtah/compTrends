@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.WARNING(
-                f"""
+                """
                 Generating daily rapports for active stores started...
                 """
             )
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         generate_daily()
         self.stdout.write(
             self.style.SUCCESS(
-                f"""
+                """
                 Daily rapports completed.
                 """
             )

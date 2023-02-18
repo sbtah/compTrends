@@ -61,4 +61,6 @@ class CategoryExtraField(models.Model):
 def create_category_from_path_pre_save(sender, instance, *args, **kwargs):
     """Create category parrent id from category path."""
     if instance.category_path:
-        instance.parrent_category_from_path = int(instance.category_path.split("/")[-2])
+        instance.parrent_category_from_path = int(
+            instance.category_path.split("/")[-2],
+        )
