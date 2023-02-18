@@ -1,5 +1,5 @@
 from stores.models import LocalStore
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 def api_update_or_create_local_store(
