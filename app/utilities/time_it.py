@@ -1,10 +1,9 @@
 import time
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 def calculate_time(func):
     def inner(*args, **kwargs):
-
         begin = time.time()
 
         func(*args, **kwargs)

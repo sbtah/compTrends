@@ -7,7 +7,7 @@ from crawler.options.endpoints import DOMAIN
 import pandas as pd
 import datetime
 from crawler.helpers.time_it import calculate_time
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 class Command(BaseCommand):
@@ -15,32 +15,45 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Custom handle method."""
-        operator = LocalStoreOperator(local_store_id=local_store.scraped_id)
-        # operator.create_xlsx_active_products_rapport()
 
-        df = operator.open_xlsx_file(directory=operator.current_month_rapport_path)
-        operator.add_missing_product_rows_to_rapport(data_frame=df)
-        # operator.add_stock_and_price_columns_to_rapport(
-        #     data_frame=df,
-        #     store_id=local_store.scraped_id,
-        #     date="12-02-2023",
-        # )
+        # TODO:
+        # Create product rapports for LocalStore.
+        # active_stores = LocalStore.objects.filter(is_active=True)
+        # for store in active_stores:
+        #     operator = LocalStoreOperator(local_store_id=store.scraped_id)
+        #     operator.create_monthly_active_products_rapport()
 
-        # operator.add_stock_and_price_columns_to_rapport(
-        #     data_frame=df, store_id=local_store.scraped_id
-        # )
+        # # TODO:
+        # # Update products rapport with active Product data for each store.
+        # active_stores = LocalStore.objects.filter(is_active=True)
+        # for store in active_stores:
+        #     operator = LocalStoreOperator(local_store_id=store.scraped_id)
+        #     df = operator.open_xlsx_file(directory=operator.current_month_rapport_path)
+        #     operator.add_missing_product_rows_to_rapport(data_frame=df)
 
-        # # operator.create_xlsx_active_products_rapport()
+        # TODO:
+        # Update products rapport with LocalData for entire month.
+        active_stores = LocalStore.objects.filter(is_active=True)
+        for store in active_stores:
+            operator = LocalStoreOperator(local_store_id=store.scraped_id)
+            df = operator.open_xlsx_file(directory=operator.current_month_rapport_path)
+            start_date = datetime.datetime.strptime(
+                operator.current_month_year, operator.MONTH_DATE_FORMAT
+            )
+            end_date = datetime.datetime.strptime(
+                operator.current_day_month_year, operator.DAY_DATE_FORMAT
+            )
+            delta = datetime.timedelta(days=1)
+            while start_date <= end_date:
+                # print(start_date)
+                # print(start_date.strftime(operator.DAY_DATE_FORMAT))
+                operator.add_stock_and_price_columns_to_rapport(
+                    data_frame=df,
+                    store_id=operator.local_store_id,
+                    date=start_date.strftime(operator.DAY_DATE_FORMAT),
+                )
+                start_date += delta
 
-        # df = operator.open_xlsx_file(directory=operator.current_month_rapport_path)
-
-        # # print(operator.current_stock_column_name)
-        # # print(operator.current_price_column_name)
-
-        # print(operator.local_store_directory)
-        # print(operator.current_month_rapport_pattern)
-        # operator.find_directory_for_store(store=operator.local_store_id)
-        # operator.create_directory_for_store(store=operator.local_store_id)
         # TODO:
         # Implement creation of series for date.
         # start_date = datetime.datetime.strptime(

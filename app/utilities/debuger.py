@@ -1,7 +1,7 @@
 from django.db import connection, reset_queries
 import time
 import functools
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 def query_debugger(func):
