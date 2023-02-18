@@ -3,7 +3,7 @@ from asyncio import Future
 from typing import Dict, Iterator, List
 
 import httpx
-from utilites.logger import logger
+from utilities.logger import logger
 from crawler.logic.base_crawler import BaseApiCrawler
 
 
