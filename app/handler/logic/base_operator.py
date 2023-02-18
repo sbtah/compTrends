@@ -5,7 +5,7 @@ import pathlib
 import openpyxl
 import pandas as pd
 from handler.settings import BASE_DIR, DATA_ROOT_DIR
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 class BaseOperator:
