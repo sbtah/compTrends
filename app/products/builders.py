@@ -1,4 +1,4 @@
-from products.models import Product, ProductLocalData, ProductExtraField
+from products.models import Product, ProductLocalData
 from categories.models import Category
 from utilities.logger import logger
 from django.db.models import Q
