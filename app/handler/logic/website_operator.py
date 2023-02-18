@@ -76,6 +76,14 @@ class LocalStoreOperator(BaseOperator):
         )
         return path
 
+    def open_current_xlsx_rapport(self) -> pd.DataFrame:
+        """
+        Opens current XLSX rapport for current LocalStore.
+        Returns DataFrame.
+        """
+        frame = self.open_xlsx_file(directory=self.current_month_rapport_path)
+        return frame
+
     def create_monthly_active_products_rapport(self):
         """
         Creates rapport of all Products data for current month.
@@ -266,8 +274,17 @@ class LocalStoreOperator(BaseOperator):
                 sheet_name=f"{self.current_month_year}",
             )
 
-    def update_products_rapport(
-        self,
-        data_frame: pd.DataFrame,
-    ):
-        pass
+    def update_products_rapport_with_active_products(self) -> bool:
+        """
+        Update Products rapport for current LocalStore,
+        with newly found active Products.
+        """
+        try:
+            df = self.open_current_xlsx_rapport()
+            self.add_missing_product_rows_to_rapport(data_frame=df)
+            return True
+        except Exception as e:
+            self.logger.error(
+                f"(update_products_rapport_with_active_products) Some other Exception: {e}"
+            )
+            return False
