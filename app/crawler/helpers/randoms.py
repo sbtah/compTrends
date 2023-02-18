@@ -1,6 +1,6 @@
 import time
 from random import randint
-from utilites.logger import logger
+from utilities.logger import logger
 
 
 def random_sleep_small():
