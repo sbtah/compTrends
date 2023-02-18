@@ -1,8 +1,7 @@
 import os
-import sys
-from datetime import datetime
 import pathlib
-import openpyxl
+from datetime import datetime
+
 import pandas as pd
 from handler.settings import BASE_DIR, DATA_ROOT_DIR
 from utilities.logger import logger
