@@ -8,7 +8,6 @@ from crawler.helpers.extractors import (
     product_local_data_extract,
 )
 from crawler.helpers.mapper import generate_ids_map
-from crawler.helpers.time_it import calculate_time
 from crawler.logic.api_crawler import ApiCrawler
 from crawler.options.endpoints import (
     CHILD_CATEGORIES_OF_BUDOWA,
@@ -38,6 +37,7 @@ from products.builders import (
 from products.models import Product
 from stores.builders import api_update_or_create_local_store
 from stores.models import EccommerceStore, LocalStore
+from utilities.time_it import calculate_time
 
 
 class DataApiScraper(ApiCrawler):
