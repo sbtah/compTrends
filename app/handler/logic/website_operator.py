@@ -1,9 +1,10 @@
-from handler.logic.base_operator import BaseOperator
-from stores.models import LocalStore
-from products.models import Product, ProductLocalData
-import pathlib
-import pandas as pd
 import datetime
+from typing import Union
+
+import pandas as pd
+from handler.logic.base_operator import BaseOperator
+from products.models import Product, ProductLocalData
+from stores.models import LocalStore
 
 
 class LocalStoreOperator(BaseOperator):
@@ -12,8 +13,12 @@ class LocalStoreOperator(BaseOperator):
     Generates and updates rapports for LocalStores.
     """
 
-    def __init__(self, local_store_id, *args, **kwargs):
+    def __init__(self, local_store_id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if not isinstance(local_store_id, int):
+            raise ValueError(
+                "local_store_id must be an integer representing LocalStore ID."
+            )
         self.local_store_id = local_store_id
         self.logger.info(f"Started operator for : '{str(self.local_store_id)}'")
 
@@ -71,13 +76,13 @@ class LocalStoreOperator(BaseOperator):
         )
         return path
 
-    def create_xlsx_active_products_rapport(self):
+    def create_monthly_active_products_rapport(self):
         """
-        Creates rapport of all Products data.
-        Return pandas DataFrame.
+        Creates rapport of all Products data for current month.
+        Returns pandas DataFrame.
         """
         if not self.find_directory(directory=self.current_month_rapport_path):
-            product_query = Product.objects.filter(is_active=True)[25:]
+            product_query = Product.objects.filter(is_active=True)
             items = []
             for product in product_query:
                 self.logger.info(f"Generating rapport for: {product}")
@@ -183,14 +188,15 @@ class LocalStoreOperator(BaseOperator):
         self,
         data_frame: pd.DataFrame,
         store_id: int,
-        date: str | datetime.datetime.date,
+        date: Union[str, datetime.datetime.date],
     ):
         """
         Process DataFrame with Product data.
         Add columns: with current stock and price for LocalStore.
         - :arg data_frame: Pandas DataFrame object. XLSX rapport with Products.
         - :arg store_id: LocalStore ID (scraped_id).
-        - :arg date: Date for which the collumns will be added.
+        - :arg date: Date for which the collumns will be added,
+            can be either string or date object.
         """
         if self.current_price_column_name in set(
             data_frame.columns
@@ -259,3 +265,9 @@ class LocalStoreOperator(BaseOperator):
                 index=False,
                 sheet_name=f"{self.current_month_year}",
             )
+
+    def update_products_rapport(
+        self,
+        data_frame: pd.DataFrame,
+    ):
+        pass
