@@ -3,7 +3,7 @@ from typing import List, Tuple
 import asyncio
 import httpx
 from crawler.helpers.randoms import random_sleep_small
-from utilites.logger import logger
+from utilities.logger import logger
 from crawler.options.settings import USER_AGENTS
 
 
