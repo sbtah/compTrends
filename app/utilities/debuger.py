@@ -1,6 +1,7 @@
-from django.db import connection, reset_queries
-import time
 import functools
+import time
+
+from django.db import connection, reset_queries
 from utilities.logger import logger
 
 
