@@ -1,4 +1,4 @@
-from utilites.logger import logger
+from utilities.logger import logger
 from categories.models import Category
 
 
