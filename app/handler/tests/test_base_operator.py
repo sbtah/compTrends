@@ -26,3 +26,16 @@ class TestBaseOperator:
         assert operator.DAY_DATE_FORMAT == "%d-%m-%Y"
         assert operator.MONTH_DATE_FORMAT == "%m-%Y"
         assert operator.YEAR_DATE_FORMAT == "%Y"
+
+    def test_date_properties(self):
+        """Test that:
+        - current_day_month_year,
+        - current_month_year,
+        - current_year,
+        properties returns properly formated strings."""
+
+        operator = BaseOperator()
+
+        assert datetime.today().strftime("%d-%m-%Y") == operator.current_day_month_year
+        assert datetime.today().strftime("%m-%Y") == operator.current_month_year
+        assert datetime.today().strftime("%Y") == operator.current_year
