@@ -1,6 +1,7 @@
 import os
 import pathlib
 from datetime import datetime
+from typing import Union
 
 import pandas as pd
 from handler.settings import BASE_DIR, DATA_ROOT_DIR
@@ -31,7 +32,9 @@ class BaseOperator:
     def current_year(self) -> str:
         return self.time_started.strftime(self.YEAR_DATE_FORMAT)
 
-    def find_directory(self, directory: pathlib.PosixPath) -> pathlib.PosixPath:
+    def find_directory(
+        self, directory: pathlib.PosixPath
+    ) -> Union[pathlib.PosixPath, None]:
         """
         Searches for specified directory.
         Return directory path if successful.
