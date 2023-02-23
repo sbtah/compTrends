@@ -1,9 +1,17 @@
-import pytest
-from datetime import datetime
-from utilities.logger import logger
-
-from handler.logic.base_operator import BaseOperator
+import os
 import pathlib
+from datetime import datetime
+
+import pytest
+from handler.logic.base_operator import BaseOperator
+
+
+@pytest.fixture
+def sample_directory():
+    os.mkdir("test")
+    directory = pathlib.PosixPath("test")
+    yield directory
+    os.removedirs(directory)
 
 
 class TestBaseOperator:
@@ -39,3 +47,34 @@ class TestBaseOperator:
         assert datetime.today().strftime("%d-%m-%Y") == operator.current_day_month_year
         assert datetime.today().strftime("%m-%Y") == operator.current_month_year
         assert datetime.today().strftime("%Y") == operator.current_year
+
+    def test_find_directory_returns_error_without_proper_path(self, caplog):
+        operator = BaseOperator()
+        directory = "/wrong/directory"
+        returns = operator.find_directory(directory=directory)
+
+        assert returns is None
+        assert (
+            f"Wrong directory provided. Received: {type(directory)}, should be path."
+            in caplog.text
+        )
+
+    def test_find_directory_exists(self, caplog, sample_directory):
+        """Test find_directory returs path to directory if successful."""
+
+        operator = BaseOperator()
+        directory = sample_directory
+        returns = operator.find_directory(directory=directory)
+
+        assert isinstance(returns, pathlib.PosixPath) is True
+        assert "Specified directory was found." in caplog.text
+
+    def test_find_directory_does_not_exists(self, caplog):
+        """Test find_directory returs False when directory does not exist."""
+
+        operator = BaseOperator()
+        directory = pathlib.PosixPath("test")
+        returns = operator.find_directory(directory=directory)
+
+        assert isinstance(returns, pathlib.PosixPath) is False
+        assert "Specified directory does not exists." in caplog.text
