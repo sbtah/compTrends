@@ -70,11 +70,18 @@ class TestBaseOperator:
         assert "Specified directory was found." in caplog.text
 
     def test_find_directory_does_not_exists(self, caplog):
-        """Test find_directory returs False when directory does not exist."""
+        """Test find_directory returs None when directory does not exist."""
 
         operator = BaseOperator()
         directory = pathlib.PosixPath("test")
         returns = operator.find_directory(directory=directory)
 
-        assert isinstance(returns, pathlib.PosixPath) is False
+        assert returns is None
         assert "Specified directory does not exists." in caplog.text
+
+    def test_find_directory_raises_exception(self):
+        """Test that find_directory raises exception."""
+
+        operator = BaseOperator()
+        with pytest.raises(Exception) as context:
+            output = operator.find_directory()
