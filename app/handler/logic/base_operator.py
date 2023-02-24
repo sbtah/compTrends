@@ -48,7 +48,7 @@ class BaseOperator:
                     return directory
                 else:
                     self.logger.info("Specified directory does not exists.")
-                    return check
+                    return None
             except Exception as e:
                 self.logger.error(f"(find_directory) Some other exception: {e}")
                 raise
