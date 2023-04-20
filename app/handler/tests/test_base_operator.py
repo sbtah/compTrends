@@ -49,6 +49,11 @@ class TestBaseOperator:
         assert datetime.today().strftime("%Y") == operator.current_year
 
     def test_find_directory_returns_error_without_proper_path(self, caplog):
+        """
+        Test that find_directory returns error,
+        if directory is not an instance of PosixPath.
+        """
+
         operator = BaseOperator()
         directory = "/wrong/directory"
         returns = operator.find_directory(directory=directory)
@@ -85,3 +90,31 @@ class TestBaseOperator:
         operator = BaseOperator()
         with pytest.raises(Exception) as context:
             output = operator.find_directory()
+
+    def test_create_directory_returns_error_without_proper_path(self, caplog):
+        """
+        Test that create_directory returns error,
+        if directory is not an instance of PosixPath.
+        """
+
+        operator = BaseOperator()
+        directory = "/wrong/directory"
+        returns = operator.create_directory(directory=directory)
+
+        assert returns is None
+        assert (
+            f"Wrong directory provided. Received: {type(directory)}, should be path."
+            in caplog.text
+        )
+
+    def test_create_directory_successful(self, caplog):
+        """Test that create_directory creates proper directory."""
+
+        operator = BaseOperator()
+        directory = pathlib.PosixPath("test")
+        returns = operator.create_directory(directory=directory)
+
+        assert returns is True
+        assert f"Created directory: '{directory}'." in caplog.text
+        assert os.path.exists(directory) is True
+        os.removedirs(directory)
