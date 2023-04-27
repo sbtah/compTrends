@@ -29,19 +29,19 @@ class Command(BaseCommand):
                  - {number_of_local_stores_start}
                 Current number of Categories:
                  - {number_of_categories_start}
-                Current number of Products: 
+                Current number of Products:
                  - {number_of_products_start}
                 Current number of ProductLocalDatas:
-                 - {number_of_products_local_data_start} 
+                 - {number_of_products_local_data_start}
                 """
             )
         )
-        DataApiScraper.scrape_local_stores()
-        DataApiScraper.scrape_main_categories()
-        DataApiScraper.scrape_child_categories()
-        DataApiScraper.discover_and_scrape_products_by_id()
-        DataApiScraper.validate_products_urls()
-        DataApiScraper.scrape_product_local_data()
+        DataApiScraper().scrape_local_stores()
+        DataApiScraper().scrape_main_categories()
+        DataApiScraper().scrape_child_categories()
+        DataApiScraper().discover_and_scrape_products_by_id()
+        DataApiScraper().validate_products_urls()
+        DataApiScraper().scrape_product_local_data()
 
         number_of_categories_finish = Category.objects.all().count()
         number_of_products_finish = Product.objects.all().count()

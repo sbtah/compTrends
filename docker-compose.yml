@@ -21,16 +21,15 @@ services:
       - 8010:8000
     # env_file is used to manage the env variables of our project
     env_file:
-      - .env
+      - .env-dev
     depends_on:
       - comp-rabbitmq
       - comp-redis
       - comp-db
-      # - chrome
 
   comp-db:
     image: postgres:15-alpine
-    container_name: "comp-db"
+    container_name: comp-db
     networks:
       - comp_network
     volumes:
@@ -42,6 +41,7 @@ services:
 
   comp-rabbitmq:
     image: rabbitmq:3.11-alpine
+    container_name: comp-rabbit
     networks:
       - comp_network
     volumes:
@@ -57,12 +57,13 @@ services:
 
   comp-redis:
     image: redis:7-alpine
+    container_name: comp-redis
     networks:
       - comp_network
     volumes:
       - ./redis_data:/data
 
-  celery_worker:
+  comp-worker:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -74,13 +75,13 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - .env
+      - .env-dev
     depends_on:
       - comp-rabbitmq
       - comp-redis
       - comp-db
 
-  celery_beat:
+  comp-beat:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -92,13 +93,13 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - .env
+      - .env-dev
     depends_on:
       - comp-rabbitmq
       - comp-redis
       - comp-db
 
-  flower:
+  comp-flower:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -110,25 +111,13 @@ services:
     volumes:
       - ./app:/app
     env_file:
-      - .env
+      - .env-dev
     ports:
       - 5557:5555
     depends_on:
       - comp-rabbitmq
       - comp-redis
       - comp-db
-  # chrome:
-  #   image: "selenium/standalone-chrome:latest"
-  #   container_name: "chrome"
-  #   environment:
-  #     - SE_VNC_NO_PASSWORD=1
-  #   networks:
-  #     - comp_network
-  #   hostname: chrome
-  #   shm_size: '2gb'
-  #   restart: always
-  #   ports:
-  #     - "4444:4444"
 
 volumes:
   dev-comp-db-data:

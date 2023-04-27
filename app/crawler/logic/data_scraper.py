@@ -107,7 +107,7 @@ class DataApiScraper(ApiCrawler):
             products_ids[x : x + stp] for x in range(0, len(products_ids), stp)  # noqa
         ]  # noqa
 
-    @calculate_time
+    #@calculate_time
     def scrape_local_stores(self):
         """
         Scrape LocalStores data by requesting Local Stores endpoint.
